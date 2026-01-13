@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#5D9C59">
+    <meta name="description" content="KeX1ng Minecraft 1.21.10 生存服务器 - 自由友好的游戏环境">
+    <meta name="keywords" content="Minecraft,服务器,生存,1.21.10,KeX1ng">
+    <title>KeX1ng Minecraft Server</title>
+    <link rel="icon" href="images/fulllogo_nobuffer.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Segoe+UI:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- 左侧汉堡菜单 -->
+    <div class="side-nav" id="sideNav">
+        <div class="side-nav-header">
+            <a href="#home" class="side-nav-logo" id="logoLink">
+                <img src="images/logo2.png" alt="KeX1ng Logo" width="120" height="auto">
+            </a>
+            <button class="side-nav-close" id="sideNavClose" aria-label="关闭菜单">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="side-nav-links">
+            <a href="#home" class="side-nav-link" data-key="nav.home">
+                <i class="fas fa-home"></i>
+                <span>首页</span>
+            </a>
+            <a href="#features" class="side-nav-link" data-key="nav.features">
+                <i class="fas fa-star"></i>
+                <span>服务器特色</span>
+            </a>
+            <a href="#voice-channels" class="side-nav-link" data-key="nav.voice">
+                <i class="fas fa-headset"></i>
+                <span>语音频道</span>
+            </a>
+            <a href="#rules" class="side-nav-link" data-key="nav.rules">
+                <i class="fas fa-book"></i>
+                <span>服务器规则</span>
+            </a>
+            <a href="#connect" class="side-nav-link" data-key="nav.connect">
+                <i class="fas fa-plug"></i>
+                <span>连接指南</span>
+            </a>
+        </nav>
+        <div class="side-nav-controls">
+            <button class="theme-toggle" id="themeToggle" aria-label="切换主题">
+                <div class="theme-icon-container">
+                    <div class="theme-icon sun">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="theme-icon moon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                </div>
+                <span class="theme-text" data-key="theme.toggle">切换主题</span>
+            </button>
+            <button class="lang-toggle" id="langToggle" aria-label="切换语言">
+                <div class="lang-text">CN</div>
+                <span class="lang-label" data-key="lang.toggle">切换语言</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 汉堡菜单触发按钮 -->
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="打开菜单">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- 通知容器 -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 英雄区域 -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 data-key="hero.title">欢迎来到<span class="highlight"> KeX1ng Server</span></h1>
+                    <p data-key="hero.subtitle">一个 Minecraft 1.21.10 的生存服务器 致力于自由 友好的游戏环境 加入我们 与服主进行深入的探讨</p>
+
+                    <!-- 服务器状态卡片 -->
+                    <div class="server-status-card" data-tilt>
+                        <div class="status-header">
+                            <h2 class="status-title" data-key="status.title">服务器状态</h2>
+                            <div class="status-indicator">
+                                <span id="statusText" data-key="status.loading">正在查询</span>
+                                <div class="status-dot" id="statusDot"></div>
+                            </div>
+                        </div>
+
+                        <div class="status-info">
+                            <div class="status-item">
+                                <span class="status-label" data-key="status.players"><i class="fas fa-users"></i>
+                                    在线玩家</span>
+                                <span class="status-value" id="onlinePlayers">--</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label" data-key="status.version"><i class="fas fa-code-branch"></i>
+                                    服务器版本</span>
+                                <span class="status-value" id="serverVersion">1.21.10</span>
+                            </div>
+                        </div>
+
+                        <div class="players-container" id="playersContainer" style="display: none;">
+                            <div class="players-title">
+                                <i class="fas fa-users"></i>
+                                <span data-key="status.onlinePlayers">在线玩家</span> (<span id="playersCount">0</span>)
+                            </div>
+                            <div class="players-list" id="playersList"></div>
+                        </div>
+
+                        <div class="error-message" id="errorMessage">
+                            <div class="error-title">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span data-key="error.title">API错误</span>
+                            </div>
+                            <div id="errorDetail" data-key="error.message">无法获取服务器状态信息 请稍后再试</div>
+                        </div>
+
+                        <!-- 服务器IP区域 -->
+                        <div class="server-ip">
+                            <div class="ip-label">
+                                <i class="fas fa-server"></i> <span data-key="server.address">服务器地址</span>
+                            </div>
+                            <div class="ip-value tooltip" id="serverAddress" role="button" tabindex="0"
+                                aria-label="点击复制服务器地址">
+                                mc.kex1ng.cn
+                                <span class="tooltip-text" data-key="server.copyHint">点击复制地址</span>
+                            </div>
+                            <button class="copy-btn" id="copyBtn" aria-label="复制服务器地址">
+                                <i class="fas fa-copy"></i> <span data-key="server.copyButton">复制服务器地址</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 功能特色区域 -->
+        <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title" data-key="features.title">服务器特色</h2>
+                <div class="features-grid">
+                    <div class="feature-card" data-tilt>
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="feature-title" data-key="features.card1.title">Paper核心</h3>
+                        <p class="feature-desc" data-key="features.card1.desc">采用高性能 Paper 核心 优化服务器性能 提供流畅的游戏体验 支持常用插件
+                            同时保持原版生存的乐趣</p>
+                    </div>
+
+                    <div class="feature-card" data-tilt>
+                        <div class="feature-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3 class="feature-title" data-key="features.card2.title">自由与规则</h3>
+                        <p class="feature-desc" data-key="features.card2.desc">在管理不发现的情况下你开的开心 发现后一律ban 最后 服主可月不可空降</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 语音频道模块 -->
+        <section class="voice-channels" id="voice-channels">
+            <div class="container">
+                <h2 class="section-title" data-key="voice.title">加入语音频道</h2>
+                <div class="voice-channels-grid">
+                    <div class="voice-channel-card" data-tilt>
+                        <div class="voice-channel-icon">
+                            <i class="fab fa-discord"></i>
+                        </div>
+                        <h3 class="voice-channel-title" data-key="voice.discord.title">Discord频道</h3>
+                        <p class="voice-channel-desc" data-key="voice.discord.desc">我猜这个b玩意应该是没人用的 我加上他单纯是因为格式好看点了
+                            而且我也有个菲律宾的朋友QWQ</p>
+                        <a href="https://discord.gg/vVZQ8w3Nu7" target="_blank" class="join-channel-btn"
+                            rel="noopener noreferrer" aria-label="加入Discord频道">
+                            <i class="fab fa-discord"></i> <span data-key="voice.joinDiscord">加入Discord</span>
+                        </a>
+                    </div>
+
+                    <div class="voice-channel-card" data-tilt>
+                        <div class="voice-channel-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="voice-channel-title" data-key="voice.kook.title">KOOK频道</h3>
+                        <p class="voice-channel-desc" data-key="voice.kook.desc">这玩意我没用过几次 听说是高仿discord 我用的时候音质好差
+                            我不知道为什么 :C</p>
+                        <a href="https://kook.vip/T7Qyiy" target="_blank" class="join-channel-btn"
+                            rel="noopener noreferrer" aria-label="加入KOOK频道">
+                            <i class="fas fa-comments"></i> <span data-key="voice.joinKook">加入KOOK</span>
+                        </a>
+                    </div>
+
+                    <div class="voice-channel-card" data-tilt>
+                        <div class="voice-channel-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="voice-channel-title" data-key="voice.oopz.title">OOPZ频道</h3>
+                        <p class="voice-channel-desc" data-key="voice.oopz.desc">我经常用的 简单方便 虽然不知道为什么方便 嗯对...</p>
+                        <a href="https://oopz.cn/i/GB8Moq" target="_blank" class="join-channel-btn"
+                            rel="noopener noreferrer" aria-label="加入OOPZ频道">
+                            <i class="fas fa-headset"></i> <span data-key="voice.joinOopz">加入OOPZ</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 服务器规则区域 -->
+        <section class="rules" id="rules">
+            <div class="container">
+                <h2 class="section-title" data-key="rules.title">服务器规则</h2>
+                <div class="rules-list">
+                    <div class="rule-item" data-rule>
+                        <div class="rule-number">1</div>
+                        <div class="rule-text" data-key="rules.rule1">尊重其他玩家 禁止任何形式的侮辱 歧视或骚扰行为</div>
+                    </div>
+                    <div class="rule-item" data-rule>
+                        <div class="rule-number">2</div>
+                        <div class="rule-text" data-key="rules.rule2">禁止使用任何作弊客户端 外挂或利用游戏漏洞获取不公平优势</div>
+                    </div>
+                    <div class="rule-item" data-rule>
+                        <div class="rule-number">3</div>
+                        <div class="rule-text" data-key="rules.rule3">不得破坏其他玩家的建筑或物品 除非获得对方明确许可</div>
+                    </div>
+                    <div class="rule-item" data-rule>
+                        <div class="rule-number">4</div>
+                        <div class="rule-text" data-key="rules.rule4">禁止在聊天频道中发送垃圾信息 广告或无关内容</div>
+                    </div>
+                    <div class="rule-item" data-rule>
+                        <div class="rule-number">5</div>
+                        <div class="rule-text" data-key="rules.rule5">保持游戏环境友好 积极帮助新玩家 共同建设和谐社区</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 连接指南区域 -->
+        <section class="connect-guide" id="connect">
+            <div class="container">
+                <h2 class="section-title" data-key="connect.title">如何连接服务器</h2>
+
+                <div class="guide-steps">
+                    <div class="guide-step" data-tilt>
+                        <div class="step-number">1</div>
+                        <h3 class="step-title" data-key="connect.step1.title">启动游戏</h3>
+                        <p class="step-desc" data-key="connect.step1.desc">确保您的 Minecraft 客户端是 <strong>1.21.10</strong>
+                            版本</p>
+                    </div>
+                    <div class="guide-step" data-tilt>
+                        <div class="step-number">2</div>
+                        <h3 class="step-title" data-key="connect.step2.title">添加服务器</h3>
+                        <p class="step-desc" data-key="connect.step2.desc">在多人游戏界面点击 添加服务器 输入IP
+                            <strong>mc.kex1ng.cn</strong>
+                        </p>
+                    </div>
+                    <div class="guide-step" data-tilt>
+                        <div class="step-number">3</div>
+                        <h3 class="step-title" data-key="connect.step3.title">加白绑定</h3>
+                        <p class="step-desc" data-key="connect.step3.desc">前往Q群添加<strong>白名单</strong>并且进入服务器根据提示<strong>绑定</strong>账号</p>
+                    </div>
+                    <div class="guide-step" data-tilt>
+                        <div class="step-number">4</div>
+                        <h3 class="step-title" data-key="connect.step4.title">开始游戏</h3>
+                        <p class="step-desc" data-key="connect.step4.desc">进入服务器后 然后你就想干啥就干啥了</p>
+                    </div>
+                </div>
+
+                <!-- QQ群帮助区域 -->
+                <a href="https://qm.qq.com/q/GkkQCFsVK6" target="_blank" class="qq-help-section" id="qqHelpSection"
+                    data-tilt rel="noopener noreferrer" aria-label="加入QQ群获取帮助">
+                    <div class="qq-help-icon" id="qqIcon">
+                        <i class="fab fa-qq"></i>
+                    </div>
+                    <h3 class="qq-help-title" data-key="qq.title">遇到问题 点击加入QQ群</h3>
+                    <p class="qq-help-desc" data-key="qq.desc">
+                        如果您在连接服务器或游戏中遇到任何问题 欢迎加入我们的QQ群寻求帮助<br>
+                        服主只要在的情况下会为您提供及时的帮助和支持
+                    </p>
+                    <div class="qq-link-hint">
+                        <i class="fas fa-external-link-alt"></i> <span data-key="qq.hint">点击将跳转到QQ群邀请链接</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-logo">KeX1ng Minecraft Server</div>
+                    <div class="footer-links">
+                        <a href="#home" class="footer-link" data-key="nav.home">首页</a>
+                        <a href="#features" class="footer-link" data-key="nav.features">特色</a>
+                        <a href="#voice-channels" class="footer-link" data-key="nav.voice">语音频道</a>
+                        <a href="#rules" class="footer-link" data-key="nav.rules">规则</a>
+                        <a href="#connect" class="footer-link" data-key="nav.connect">连接指南</a>
+                    </div>
+                    <div class="copyright" data-key="footer.copyright">
+                        服主非常听劝 你能看到这条消息那么恭喜你 你会发现新的大陆<br>
+                        服务器地址 <strong>mc.kex1ng.cn</strong><br>
+                        服务器版本 Minecraft 1.21.10<br>
+                        有问题 加入QQ群 <a href="https://qm.qq.com/q/K0xr3R4pCq" target="_blank"
+                            style="color: var(--primary-color); text-decoration: none;" data-key="qq.join"
+                            rel="noopener noreferrer">点击加群</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 音效容器（用于预加载和播放音效） -->
+    <audio id="meowSound" style="display: none;"></audio>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
